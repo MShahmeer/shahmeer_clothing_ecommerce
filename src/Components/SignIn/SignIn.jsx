@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import FormInput from "../FormInput/FormInput";
 import "./SignInStyles.scss";
 class SignIn extends Component {
   constructor(props) {
@@ -16,11 +17,11 @@ class SignIn extends Component {
     this.setState({ email: "", password: "" });
   };
 
-  handleChange = event =>{
-    const {value, name} = event.target;
+  handleChange = (event) => {
+    const { value, name } = event.target;
 
-    this.setState({[name]: value});
-  }
+    this.setState({ [name]: value });
+  };
   render() {
     return (
       <div className="sign-in">
@@ -28,23 +29,22 @@ class SignIn extends Component {
         <span>Sign In with your email and password</span>
 
         <form onSubmit={this.handleSubmit}>
-          <input
+          <FormInput
             name="email"
             type="email"
+            label="email"
             value={this.state.email}
-            onChange={this.handleChange}
+            handleChange={this.handleChange}
             required
-          ></input>
-          <label>Email</label>
-          <input
+          ></FormInput>
+          <FormInput
             name="password"
             type="password"
+            label="password"
             value={this.state.password}
-            onChange={this.handleChange}
+            handleChange={this.handleChange}
             required
-          ></input>
-          <label>Password</label>
-
+          ></FormInput>
           <input type="submit" value="Submit Form" />
         </form>
       </div>
