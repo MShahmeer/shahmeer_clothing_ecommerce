@@ -1,7 +1,12 @@
 import React from "react";
 import "./App.css";
 import HomePage from "./Pages/HomePage/HomePage";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { connect } from "react-redux";
 import ShopPage from "./Pages/Shop/ShopPage";
 import Header from "./Components/Header/Header";
@@ -11,8 +16,9 @@ import { setCurrentUser } from "./Redux/User/userActions";
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
+
   componentDidMount() {
-  const {setCurrentUser} = this.props;
+    const { setCurrentUser } = this.props;
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
@@ -37,20 +43,32 @@ class App extends React.Component {
   }
 
   render() {
+    console.log(this.props.currentUser);
     return (
       <Router>
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
-          <Route path="/signin" element={<SignInAndSignUp />} />
+
+          <Route
+            exact
+            path="/signin"
+            element={
+              this.props.currentUser ? <Navigate to="/" /> : <SignInAndSignUp />
+            }
+          />
         </Routes>
       </Router>
     );
   }
 }
+
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
