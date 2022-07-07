@@ -1,61 +1,23 @@
-//this will be the class component because we have to store the state of those menu items
-import React, { Component } from "react";
+import React from "react";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+
+import { selectDirectorySections } from "../../Redux/Directory/directorySelectors";
 import MenuItem from "../MenuItem/MenuItem";
 import "./DirectoryStyles.scss";
-class Directory extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      sections: [
-        {
-          title: "hats",
-          imageUrl: "https://i.ibb.co/cvpntL1/hats.png",
-          id: "1",
-          linkUrl: "hats",
-        },
-        {
-          title: "jackets",
-          imageUrl: "https://i.ibb.co/px2tCc3/jackets.png",
-          id: "2",
-          linkUrl: "",
-        },
-        {
-          title: "sneakers",
-          imageUrl: "https://i.ibb.co/0jqHpnp/sneakers.png",
-          id: "3",
-          linkUrl: "",
-        },
-        {
-          title: "women",
-          imageUrl: "https://i.ibb.co/GCCdy8t/women.png",
-          size: "large",
-          id: "4",
-          linkUrl: "",
-        },
-        {
-          title: "men",
-          imageUrl: "https://i.ibb.co/R70vBrQ/men.png",
-          size: "large",
-          id: "5",
-          linkUrl: "",
-        },
-      ],
-    };
-  }
+const Directory = ({ sections }) => {
+  return (
+    <div className="directory-menu">
+      {sections.map(({ id, ...otherSectionProps }) => (
+        <MenuItem key={id} {...otherSectionProps} />
+      ))}
+    </div>
+  );
+};
 
-  render() {
-    return (
-      <div className="directory-menu">
-        {this.state.sections.map(({ id, ...otherSectionProps }) => (
-          <MenuItem
-            key={id}
-            {...otherSectionProps}
-          />
-        ))}
-      </div>
-    );
-  }
-}
+const mapStateToProps = createStructuredSelector({
+  sections: selectDirectorySections,
+});
 
-export default Directory;
+export default connect(mapStateToProps)(Directory);
